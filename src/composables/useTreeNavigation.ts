@@ -1,6 +1,7 @@
 import { ref, computed, watch } from "vue";
 import type { Ref } from "vue";
 import type { TreeNode } from "../types/tree";
+import { collectDescendantBranchIds } from "../utils/treeHelpers";
 
 function buildNodeMap(
   nodes: TreeNode[],
@@ -43,19 +44,6 @@ export function useTreeNavigation(treeData: Ref<TreeNode[]>) {
     if (!node || node.type !== "branch") return;
     // If this is the root node (no parentId), collapse all descendant branch nodes
     if (!node.parentId) {
-      // Collect all descendant branch ids
-      function collectDescendantBranchIds(n: TreeNode): string[] {
-        let ids: string[] = [];
-        if (n.type === "branch" && n.children) {
-          n.children.forEach((child: TreeNode) => {
-            if (child.type === "branch") {
-              ids.push(child.id);
-              ids = ids.concat(collectDescendantBranchIds(child));
-            }
-          });
-        }
-        return ids;
-      }
       const descendantBranchIds = collectDescendantBranchIds(node);
       expandedNodes.value = expandedNodes.value.filter(
         (id) => !descendantBranchIds.includes(id)
@@ -80,18 +68,6 @@ export function useTreeNavigation(treeData: Ref<TreeNode[]>) {
     const node = nodeMap.value.get(nodeId);
     // If selecting the root node, collapse all descendant branches
     if (node?.type === "branch" && !node.parentId) {
-      function collectDescendantBranchIds(n: TreeNode): string[] {
-        let ids: string[] = [];
-        if (n.type === "branch" && n.children) {
-          n.children.forEach((child: TreeNode) => {
-            if (child.type === "branch") {
-              ids.push(child.id);
-              ids = ids.concat(collectDescendantBranchIds(child));
-            }
-          });
-        }
-        return ids;
-      }
       const descendantBranchIds = collectDescendantBranchIds(node);
       expandedNodes.value = expandedNodes.value.filter(
         (id) => !descendantBranchIds.includes(id)

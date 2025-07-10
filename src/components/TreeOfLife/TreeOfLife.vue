@@ -19,7 +19,7 @@
         :node="node"
         :is-selected="selectedNodeId === node.id"
         :is-expanded="expandedNodes.includes(node.id)"
-        :depth="getNodeDepth(node.id)"
+        :depth="getNodeDepth(node.id, nodeMap)"
         @select="handleNodeSelect"
         @expand="handleNodeExpand"
         @collapse="handleNodeCollapse"
@@ -38,6 +38,7 @@ import type { TreeNode as TreeNodeType } from "../../types/tree";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import ErrorMessage from "./ErrorMessage.vue";
 import TreeNode from "./TreeNode.vue";
+import { getNodeDepth } from '../../utils/treeHelpers';
 
 const emit = defineEmits<{
   (e: "select-node", node: TreeNodeType | null): void;
@@ -77,16 +78,5 @@ function handleNodeCollapse(nodeId: string) {
 }
 function handleKeyNavigation(event: KeyboardEvent) {
   // Placeholder for keyboard navigation logic
-}
-function getNodeDepth(nodeId: string): number {
-  let depth = 0;
-  let currentId = nodeId;
-  while (currentId) {
-    const node = nodeMap.value.get(currentId);
-    if (!node || !node.parentId) break;
-    currentId = node.parentId;
-    depth++;
-  }
-  return depth;
 }
 </script>

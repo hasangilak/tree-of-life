@@ -29,4 +29,29 @@ export function parseApiTree(
     };
   }
   throw new Error('Unknown node type');
+}
+
+export function collectDescendantBranchIds(node: TreeNode): string[] {
+  let ids: string[] = [];
+  if (node.type === 'branch' && node.children) {
+    node.children.forEach((child: TreeNode) => {
+      if (child.type === 'branch') {
+        ids.push(child.id);
+        ids = ids.concat(collectDescendantBranchIds(child));
+      }
+    });
+  }
+  return ids;
+}
+
+export function getNodeDepth(nodeId: string, nodeMap: Map<string, TreeNode>): number {
+  let depth = 0;
+  let currentId = nodeId;
+  while (currentId) {
+    const node = nodeMap.get(currentId);
+    if (!node || !node.parentId) break;
+    currentId = node.parentId;
+    depth++;
+  }
+  return depth;
 } 
