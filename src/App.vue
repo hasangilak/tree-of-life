@@ -122,7 +122,10 @@ function closeSidebar() {
             </div>
           </template>
           <template v-else>
-            <div class="text-muted m-auto text-center text-base md:text-lg">Select a node to see details.</div>
+            <div v-if="treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'" class="flex flex-col items-center justify-center m-auto h-full">
+              <span class="text-3xl md:text-5xl font-bold text-secondary font-serif text-center">{{ treeStore.selectedNode.data.name }}</span>
+            </div>
+            <div v-else class="text-muted m-auto text-center text-base md:text-lg">Select a node to see details.</div>
           </template>
         </div>
       </div>
