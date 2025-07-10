@@ -27,12 +27,13 @@
 import { onMounted, provide, watch } from "vue";
 import { useTreeData } from "../../composables/useTreeData";
 import { useTreeNavigation } from "../../composables/useTreeNavigation";
+import type { TreeNode as TreeNodeType } from "../../types/tree";
 // import { useKeyboardNavigation } from '../../composables/useKeyboardNavigation';
-import TreeNode from "./TreeNode.vue";
 import LoadingSpinner from "./LoadingSpinner.vue";
 import ErrorMessage from "./ErrorMessage.vue";
+import TreeNode from "./TreeNode.vue";
 
-const emit = defineEmits<{ (e: "select-node", node: any): void }>();
+const emit = defineEmits<{ (e: "select-node", node: TreeNodeType | null): void }>();
 
 const { treeData, isLoading, error, fetchTreeData } = useTreeData();
 const {
@@ -57,7 +58,7 @@ onMounted(() => {
 
 watch(selectedNodeId, (id) => {
   if (id) {
-    const node = visibleNodes.value.find((n) => n.id === id);
+    const node = visibleNodes.value.find((n) => n.id === id) || null;
     emit("select-node", node);
   }
 });

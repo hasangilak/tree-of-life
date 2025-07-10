@@ -19,7 +19,7 @@ const handlePanelHover = (idx: number) => {
 };
 
 const treeStore = useTreeStore();
-function handleSelectNode(node: any) {
+function handleSelectNode(node: TreeNode | null) {
   treeStore.setSelectedNode(node);
 }
 

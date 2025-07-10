@@ -16,8 +16,8 @@ export function useTreeData() {
       const data = await response.json();
       // Always parse as a single root node
       treeData.value = [parseApiTree(data)];
-    } catch (err: any) {
-      error.value = err.message || 'Unknown error';
+    } catch (err: unknown) {
+      error.value = err instanceof Error ? err.message : String(err) || 'Unknown error';
     } finally {
       isLoading.value = false;
     }

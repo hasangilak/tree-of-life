@@ -1,36 +1,12 @@
 <template>
-  <div class="error-message" role="alert">
-    <span>{{ message }}</span>
-    <button @click="$emit('retry')" class="retry-btn">Retry</button>
+  <div class="flex items-center gap-4 text-red-600 bg-red-50 border border-red-200 p-4 rounded-md">
+    <slot />
+    <button class="bg-sky-400 text-white border-none rounded px-4 py-2 cursor-pointer font-medium transition-colors duration-200 hover:bg-sky-600 retry-btn">
+      Retry
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ message: string }>();
-</script>
-
-<style scoped>
-.error-message {
-  color: #ef4444;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  padding: 1rem 2rem;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.retry-btn {
-  background: #38bdf8;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-.retry-btn:hover {
-  background: #0ea5e9;
-}
-</style> 
+defineProps<{ message: string }>();
+</script> 

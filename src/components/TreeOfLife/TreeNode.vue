@@ -57,7 +57,7 @@ const emit = defineEmits<{
 }>();
 
 const hasChildren = computed(
-  () => props.node.children && props.node.children.length > 0
+  () => props.node.type === 'branch' && props.node.children.length > 0
 );
 
 function handleClick() {

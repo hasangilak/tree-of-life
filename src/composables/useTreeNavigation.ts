@@ -5,7 +5,7 @@ import type { TreeNode } from '../types/tree';
 function buildNodeMap(nodes: TreeNode[], parentId?: string, map = new Map<string, TreeNode>()): Map<string, TreeNode> {
   nodes.forEach(node => {
     map.set(node.id, { ...node, parentId });
-    if (node.children) buildNodeMap(node.children, node.id, map);
+    if (node.type === 'branch' && node.children) buildNodeMap(node.children, node.id, map);
   });
   return map;
 }

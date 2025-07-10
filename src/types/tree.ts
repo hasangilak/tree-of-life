@@ -3,6 +3,8 @@
 export type Status = 'nt' | 'lc' | 'vu' | 'en';
 
 export interface LeafNode {
+  id: string;
+  parentId?: string;
   type: 'leaf';
   data: {
     name: string;
@@ -11,6 +13,8 @@ export interface LeafNode {
 }
 
 export interface BranchNode {
+  id: string;
+  parentId?: string;
   type: 'branch';
   label: string;
   children: TreeNode[];
