@@ -52,12 +52,12 @@ function closeSidebar() {
       <!-- Sidebar (desktop: relative, mobile: fixed overlay) -->
       <div>
         <!-- Overlay for mobile -->
-        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black bg-opacity-30 md:hidden" @click="closeSidebar"></div>
+        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/[0.02] md:hidden" @click="closeSidebar"></div>
         <div
           class="bg-primary flex flex-col shadow-xl transition-transform duration-300 md:relative md:w-80 md:h-screen md:z-20 fixed top-0 left-0 h-full w-72 max-w-full z-40 md:translate-x-0"
           :class="[sidebarOpen ? 'translate-x-0' : '-translate-x-full', 'md:translate-x-0']"
         >
-          <div class="p-6 md:p-8">
+          <div class="p-6 pt-20 md:p-8 md:pt-8">
             <h1 class="text-xl md:text-2xl font-bold text-accent tracking-wide mb-4">InDanger</h1>
             <TreeOfLife @select-node="handleSelectNode" />
           </div>
