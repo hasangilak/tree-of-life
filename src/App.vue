@@ -47,6 +47,35 @@ function getAnimalImage(child: TreeNode): string {
   return images[name];
 }
 
+function getFacts(child: TreeNode): string {
+  const name = child.type === "branch" ? child.label : child.data.name;
+
+  const facts: Record<string, string> = {
+    marsupials:
+      "Marsupials give birth to underdeveloped young that continue growing in a pouch. They include kangaroos, koalas, wallabies, and wombats.",
+    monotremes:
+      "Monotremes are egg-laying mammals, a group that includes only the platypus and echidnas. They are found exclusively in Australia and New Guinea.",
+    placentals:
+      "Placentals are mammals whose young develop fully inside the mother’s womb before birth. This group includes humans, dogs, cats, and whales.",
+    platypus:
+      "The platypus is one of the only mammals that lays eggs and has a duck-like bill. Males have venomous spurs on their hind legs.",
+    human:
+      "Humans are the only primates capable of complex language, technology, and cultural evolution. They have colonized every continent on Earth.",
+    chimpanzee:
+      "Chimpanzees are one of our closest living relatives, sharing about 98.8% of our DNA. They use tools, show emotions, and live in complex social groups.",
+    tiger:
+      "Tigers are the largest wild cats and can weigh over 300 kg. Each tiger has a unique stripe pattern, like a fingerprint.",
+    wolf: "Wolves are highly social animals that live and hunt in packs. They communicate through howls, body language, and scent marking.",
+    echidna:
+      "Echidnas are spiny anteaters that use their long, sticky tongues to catch insects. Like platypuses, they lay eggs and are monotremes.",
+    "red kangaroo":
+      "Red kangaroos are the largest marsupial species and can leap over 8 meters in a single bound. Males are often reddish-brown while females are bluish-grey",
+    koala:
+      "Koalas sleep up to 20 hours a day and eat only eucalyptus leaves. They are marsupials, and their babies (joeys) develop in a pouch.",
+  };
+
+  return facts[name];
+}
 // Mobile sidebar state
 const sidebarOpen = ref(false);
 function toggleSidebar() {
@@ -166,18 +195,32 @@ function closeSidebar() {
           </template>
           <template v-else>
             <div
-              v-if="treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'"
+              v-if="
+                treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'
+              "
               class="flex flex-col md:flex-row w-full h-full"
             >
               <div
                 class="bg-center bg-no-repeat bg-cover flex items-center justify-center w-full min-h-3/6 md:h-full md:basis-3/5 md:w-3/5"
-                :style="{ backgroundImage: `url('${getAnimalImage(treeStore.selectedNode)}')` }"
+                :style="{
+                  backgroundImage: `url('${getAnimalImage(
+                    treeStore.selectedNode
+                  )}')`,
+                }"
               ></div>
               <div
                 class="flex flex-col items-center justify-center w-full min-h-[100px] md:min-h-0 md:h-full md:basis-2/5 md:w-2/5 md:min-w-[300px]"
               >
-                <span class="text-3xl md:text-5xl font-bold text-secondary font-serif text-center">
+                <span
+                  class="text-4xl md:text-6xl font-extrabold text-secondary font-serif text-center mb-6 tracking-tight drop-shadow"
+                >
                   {{ treeStore.selectedNode.data.name }}
+                </span>
+                <div class="w-2/3 h-0.5 bg-secondary rounded-full mb-6"></div>
+                <span
+                  class="text-base md:text-lg text-accent font-serif text-center italic opacity-80 px-6"
+                >
+                  {{ getFacts(treeStore.selectedNode) }}
                 </span>
               </div>
             </div>
