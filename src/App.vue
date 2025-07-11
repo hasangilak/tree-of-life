@@ -94,7 +94,7 @@ function closeSidebar() {
       </div>
       <!-- Hamburger menu (mobile only) -->
       <button
-        class="fixed top-4 left-4 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-primary shadow-md text-accent md:hidden"
+        class="fixed top-4 left-4 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-primary[0.08] shadow-md text-accent md:hidden"
         @click="toggleSidebar"
         aria-label="Open menu"
       >
@@ -166,26 +166,17 @@ function closeSidebar() {
           </template>
           <template v-else>
             <div
-              v-if="
-                treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'
-              "
-              class="flex w-full h-full"
+              v-if="treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'"
+              class="flex flex-col md:flex-row w-full h-full"
             >
               <div
-                class="flex flex-col items-center justify-center m-auto h-full inset-0 bg-center bg-no-repeat bg-cover"
-                :class="'basis-3/5 w-3/5'"
-                :style="{
-                  backgroundImage: `url('${getAnimalImage(
-                    treeStore.selectedNode
-                  )}')`,
-                }"
+                class="bg-center bg-no-repeat bg-cover flex items-center justify-center w-full min-h-3/6 md:h-full md:basis-3/5 md:w-3/5"
+                :style="{ backgroundImage: `url('${getAnimalImage(treeStore.selectedNode)}')` }"
               ></div>
               <div
-                class="flex flex-col items-center justify-center h-full min-w-[300px] basis-2/5 w-2/5"
+                class="flex flex-col items-center justify-center w-full min-h-[100px] md:min-h-0 md:h-full md:basis-2/5 md:w-2/5 md:min-w-[300px]"
               >
-                <span
-                  class="text-3xl md:text-5xl font-bold text-secondary font-serif text-center"
-                >
+                <span class="text-3xl md:text-5xl font-bold text-secondary font-serif text-center">
                   {{ treeStore.selectedNode.data.name }}
                 </span>
               </div>
