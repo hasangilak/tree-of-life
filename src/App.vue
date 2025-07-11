@@ -14,10 +14,6 @@ const panels = [
 const currentSlide = ref(1);
 const totalSlides = panels.length;
 
-const handlePanelHover = (idx: number) => {
-  currentSlide.value = idx + 1;
-};
-
 const treeStore = useTreeStore();
 function handleSelectNode(node: TreeNode | null) {
   treeStore.setSelectedNode(node);

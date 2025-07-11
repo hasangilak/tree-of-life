@@ -76,7 +76,7 @@ function handleNodeExpand(nodeId: string) {
 function handleNodeCollapse(nodeId: string) {
   collapseNode(nodeId);
 }
-function handleKeyNavigation(event: KeyboardEvent) {
+function handleKeyNavigation() {
   // Placeholder for keyboard navigation logic
 }
 </script>

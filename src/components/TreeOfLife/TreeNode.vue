@@ -72,7 +72,7 @@ function handleExpand() {
   }
 }
 
-function handleKeydown(event: KeyboardEvent) {
+function handleKeydown() {
   // Placeholder for keyboard navigation logic
 }
 </script>
