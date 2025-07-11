@@ -24,15 +24,16 @@ function handleSelectNode(node: TreeNode | null) {
 }
 
 function getAnimalImage(child: TreeNode): string {
-  const name = child.type === 'branch' ? child.label : child.data.name;
+  const name = child.type === "branch" ? child.label : child.data.name;
   const images: Record<string, string> = {
-    Elephants: " http://unsplash.it/600/800?random",
-    Pandas: "https://source.unsplash.com/600x800/?Pandas",
-    Tigers: "https://source.unsplash.com/600x800/?Tigers",
-    Gorillas: "https://source.unsplash.com/600x800/?Gorillas", 
+    marsupials: "/public/marsupials.png",
+    monotremes: "/public/monotreme.png",
+    placentals: "/public/placentals.png",
+    platypus: "/public/platypus.png",
+    echidna: "/public/echidna.png",
     // Add more as needed
   };
-  return images[name] || "http://unsplash.it/600/800?random/?" + name;
+  return images[name];
 }
 
 // Mobile sidebar state
@@ -52,13 +53,24 @@ function closeSidebar() {
       <!-- Sidebar (desktop: relative, mobile: fixed overlay) -->
       <div>
         <!-- Overlay for mobile -->
-        <div v-if="sidebarOpen" class="fixed inset-0 z-30 bg-black/[0.02] md:hidden" @click="closeSidebar"></div>
+        <div
+          v-if="sidebarOpen"
+          class="fixed inset-0 z-30 bg-black/[0.02] md:hidden"
+          @click="closeSidebar"
+        ></div>
         <div
           class="bg-primary flex flex-col shadow-xl transition-transform duration-300 md:relative md:w-80 md:h-screen md:z-20 fixed top-0 left-0 h-full w-72 max-w-full z-40 md:translate-x-0"
-          :class="[sidebarOpen ? 'translate-x-0' : '-translate-x-full', 'md:translate-x-0']"
+          :class="[
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+            'md:translate-x-0',
+          ]"
         >
           <div class="p-6 pt-20 md:p-8 md:pt-8">
-            <h1 class="text-xl md:text-2xl font-bold text-accent tracking-wide mb-4">InDanger</h1>
+            <h1
+              class="text-xl md:text-2xl font-bold text-accent tracking-wide mb-4"
+            >
+              InDanger
+            </h1>
             <TreeOfLife @select-node="handleSelectNode" />
           </div>
           <div class="p-6 md:p-8 mt-auto hidden md:block">
@@ -75,7 +87,19 @@ function closeSidebar() {
         @click="toggleSidebar"
         aria-label="Open menu"
       >
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg
+          class="w-7 h-7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
       </button>
       <!-- Main content -->
       <div class="flex-1 h-screen flex">
@@ -95,9 +119,15 @@ function closeSidebar() {
                 :hovered="{ flex: 1.7 }"
                 :transition="{ type: 'tween', duration: 0.5 }"
                 v-for="(child, idx) in treeStore.selectedNode.children"
-                :key="child.type === 'branch' ? 'branch-' + child.label : 'leaf-' + child.data.name"
+                :key="
+                  child.type === 'branch'
+                    ? 'branch-' + child.label
+                    : 'leaf-' + child.data.name
+                "
                 class="relative flex items-center justify-center h-64 md:h-full min-w-0 overflow-hidden group cursor-pointer transition-all duration-500 shadow-lg border-b md:border-b-0 md:border-r border-secondary"
-                :class="idx === treeStore.selectedNode.children.length - 1 ? '' : ''"
+                :class="
+                  idx === treeStore.selectedNode.children.length - 1 ? '' : ''
+                "
               >
                 <!-- Background image -->
                 <div
@@ -107,7 +137,7 @@ function closeSidebar() {
                   }"
                 ></div>
                 <!-- Overlay -->
-                <div class="absolute inset-0 bg-primary bg-opacity-60"></div>
+                <div class="absolute inset-0 bg-primary[0.05]"></div>
                 <!-- Animal name -->
                 <div
                   class="relative z-10 flex items-center justify-center w-full h-full"
@@ -115,17 +145,33 @@ function closeSidebar() {
                   <span
                     class="text-2xl md:text-5xl font-bold text-secondary font-serif text-center w-full"
                   >
-                    {{ child.type === 'branch' ? child.label : child.data.name }}
+                    {{
+                      child.type === "branch" ? child.label : child.data.name
+                    }}
                   </span>
                 </div>
               </div>
             </div>
           </template>
           <template v-else>
-            <div v-if="treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'" class="flex flex-col items-center justify-center m-auto h-full">
-              <span class="text-3xl md:text-5xl font-bold text-secondary font-serif text-center">{{ treeStore.selectedNode.data.name }}</span>
+            <div
+              v-if="
+                treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'
+              "
+              class="flex flex-col items-center justify-center m-auto h-full inset-0 bg-center bg-cover w-full"
+              :style="{
+                backgroundImage: `url('${getAnimalImage(
+                  treeStore.selectedNode
+                )}')`,
+              }"
+            >
             </div>
-            <div v-else class="text-muted m-auto text-center text-base md:text-lg">Select a node to see details.</div>
+            <div
+              v-else
+              class="text-muted m-auto text-center text-base md:text-lg"
+            >
+              Select a node to see details.
+            </div>
           </template>
         </div>
       </div>
