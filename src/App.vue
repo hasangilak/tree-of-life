@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TreeOfLife from "./components/TreeOfLife/TreeOfLife.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useTreeStore } from "./stores/tree";
 import type { TreeNode } from "./types/tree";
 
@@ -14,6 +14,14 @@ const panels = [
 const currentSlide = ref(1);
 const totalSlides = panels.length;
 
+// Computed padded values for display
+const paddedCurrentSlide = computed(() =>
+  currentSlide.value < 10 ? `0${currentSlide.value}` : `${currentSlide.value}`
+);
+const paddedTotalSlides = computed(() =>
+  totalSlides < 10 ? `0${totalSlides}` : `${totalSlides}`
+);
+
 const treeStore = useTreeStore();
 function handleSelectNode(node: TreeNode | null) {
   treeStore.setSelectedNode(node);
@@ -22,12 +30,19 @@ function handleSelectNode(node: TreeNode | null) {
 function getAnimalImage(child: TreeNode): string {
   const name = child.type === "branch" ? child.label : child.data.name;
   const images: Record<string, string> = {
-    marsupials: "/public/marsupials.png",
-    monotremes: "/public/monotreme.png",
-    placentals: "/public/placentals.png",
-    platypus: "/public/platypus.png",
-    echidna: "/public/echidna.png",
-    // Add more as needed
+    marsupials: "https://i.ibb.co/yFymcB7r/marsupials.png",
+    monotremes: "https://i.ibb.co/TBS5kkrr/monotreme.png",
+    placentals: "https://i.ibb.co/cKrXTQ9d/placentals.png",
+    platypus: "https://i.ibb.co/0yhf85cs/platypus.png",
+    echidna: "https://i.ibb.co/LXfzr8R7/echidna.png",
+    "red kangaroo": "https://i.ibb.co/1tK1Z1Ht/kangaroo.png",
+    koala: "https://i.ibb.co/yBSW8fpR/koala.png",
+    carnivora: "https://i.ibb.co/1wYmsP5/carnivora.png",
+    primates: "https://i.ibb.co/w9gtfyD/primates.png",
+    wolf: "https://i.ibb.co/BHP4VbQY/wolf.png",
+    tiger: "https://i.ibb.co/nNchn0vs/tiger.png",
+    human: "https://i.ibb.co/2Hp9fzF/human.png",
+    chimpanzee: "https://i.ibb.co/3QnChC0/chimpanzee.png",
   };
   return images[name];
 }
@@ -71,8 +86,8 @@ function closeSidebar() {
           </div>
           <div class="p-6 md:p-8 mt-auto hidden md:block">
             <div class="text-muted text-xs md:text-sm font-light">
-              <span>{{ String(currentSlide).padStart(2, "0") }}</span> /
-              <span>{{ String(totalSlides).padStart(2, "0") }}</span>
+              <span>{{ paddedCurrentSlide }}</span> /
+              <span>{{ paddedTotalSlides }}</span>
             </div>
           </div>
         </div>
@@ -154,19 +169,26 @@ function closeSidebar() {
               v-if="
                 treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'
               "
-              class="flex flex-col items-center justify-center m-auto h-full inset-0 bg-center bg-cover w-full"
-              :style="{
-                backgroundImage: `url('${getAnimalImage(
-                  treeStore.selectedNode
-                )}')`,
-              }"
+              class="flex w-full h-full"
             >
-            </div>
-            <div
-              v-else
-              class="text-muted m-auto text-center text-base md:text-lg"
-            >
-              Select a node to see details.
+              <div
+                class="flex flex-col items-center justify-center m-auto h-full inset-0 bg-center bg-no-repeat bg-cover"
+                :class="'basis-3/5 w-3/5'"
+                :style="{
+                  backgroundImage: `url('${getAnimalImage(
+                    treeStore.selectedNode
+                  )}')`,
+                }"
+              ></div>
+              <div
+                class="flex flex-col items-center justify-center h-full min-w-[300px] basis-2/5 w-2/5"
+              >
+                <span
+                  class="text-3xl md:text-5xl font-bold text-secondary font-serif text-center"
+                >
+                  {{ treeStore.selectedNode.data.name }}
+                </span>
+              </div>
             </div>
           </template>
         </div>
