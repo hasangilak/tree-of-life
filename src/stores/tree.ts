@@ -1,16 +1,17 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
 import type { TreeNode } from '../types/tree';
 
-export const useTreeStore = defineStore('tree', () => {
-  const selectedNode = ref<TreeNode | null>(null);
+export interface TreeState {
+  selectedNode: TreeNode | null;
+}
 
-  function setSelectedNode(node: TreeNode | null) {
-    selectedNode.value = node;
-  }
-
-  return {
-    selectedNode,
-    setSelectedNode,
-  };
+export const useTreeStore = defineStore('tree', {
+  state: (): TreeState => ({
+    selectedNode: null,
+  }),
+  actions: {
+    setSelectedNode(node: TreeNode | null) {
+      this.selectedNode = node;
+    },
+  },
 }); 
