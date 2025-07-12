@@ -62,7 +62,7 @@ onMounted(() => {
 
 watch(selectedNodeId, (id) => {
   if (id) {
-    const node = visibleNodes.value.find((n) => n.id === id) || null;
+    const node = visibleNodes.value.find((n: TreeNodeType) => n.id === id) || null;
     emit("select-node", node);
   }
 });

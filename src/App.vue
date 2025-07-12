@@ -24,9 +24,8 @@ function closeSidebar() {
 </script>
 
 <template>
-  <div class="bg-primary text-primary min-h-screen overflow-hidden">
+  <div class="flex bg-primary text-primary min-h-screen overflow-hidden">
     <div
-      v-if="sidebarOpen"
       class="fixed inset-0 z-30 bg-black/[0.02] md:hidden"
       @click="closeSidebar"
       aria-label="Close sidebar overlay"
@@ -36,11 +35,7 @@ function closeSidebar() {
     <Sidebar :open="sidebarOpen">
       <TreeOfLife @select-node="handleSelectNode" />
     </Sidebar>
-    <HamburgerMenu v-if="!sidebarOpen" @open="toggleSidebar" />
-    <MainContent
-      :treeStore="treeStore"
-      :sidebarOpen="sidebarOpen"
-      @closeSidebar="closeSidebar"
-    />
+    <HamburgerMenu @open="toggleSidebar" />
+    <MainContent/>
   </div>
 </template>
