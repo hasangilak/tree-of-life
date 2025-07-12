@@ -9,6 +9,7 @@
           <LeafDetails :leaf="treeStore.selectedNode" />
         </template>
       </div>
+      <Loader v-else />
     </div>
   </div>
 </template>
@@ -17,6 +18,7 @@
 import { useTreeStore } from "../stores/tree";
 import LeafDetails from "./LeafDetails.vue";
 import BranchDetails from "./BranchDetails.vue";
+import Loader from "./Loader.vue";
 
 const treeStore = useTreeStore();
 </script>

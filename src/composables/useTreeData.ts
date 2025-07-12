@@ -14,6 +14,7 @@ export function useTreeData() {
       const response = await fetch(
         "https://storyblok-frontend-engineer-homework-data.vercel.app/treeOfLife.json"
       );
+      await new Promise(resolve => setTimeout(resolve, 750));
       if (!response.ok) throw new Error("Failed to fetch tree data");
       const data = await response.json();
       // Always parse as a single root node
