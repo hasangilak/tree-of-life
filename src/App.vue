@@ -1,86 +1,23 @@
 <script setup lang="ts">
 import TreeOfLife from "./components/TreeOfLife/TreeOfLife.vue";
-import { ref, computed } from "vue";
+import Sidebar from "./components/Sidebar.vue";
+import HamburgerMenu from "./components/HamburgerMenu.vue";
+import MainContent from "./components/MainContent.vue";
+import { ref } from "vue";
 import { useTreeStore } from "./stores/tree";
 import type { TreeNode } from "./types/tree";
 
-const panels = [
-  { title: "Elephants" },
-  { title: "Pandas" },
-  { title: "Tigers" },
-  { title: "Gorillas" },
-];
-
-const currentSlide = ref(1);
-const totalSlides = panels.length;
-
-// Computed padded values for display
-const paddedCurrentSlide = computed(() =>
-  currentSlide.value < 10 ? `0${currentSlide.value}` : `${currentSlide.value}`
-);
-const paddedTotalSlides = computed(() =>
-  totalSlides < 10 ? `0${totalSlides}` : `${totalSlides}`
-);
-
 const treeStore = useTreeStore();
+const sidebarOpen = ref(false);
+
 function handleSelectNode(node: TreeNode | null) {
   treeStore.setSelectedNode(node);
 }
 
-function getAnimalImage(child: TreeNode): string {
-  const name = child.type === "branch" ? child.label : child.data.name;
-  const images: Record<string, string> = {
-    marsupials: "https://i.ibb.co/yFymcB7r/marsupials.png",
-    monotremes: "https://i.ibb.co/TBS5kkrr/monotreme.png",
-    placentals: "https://i.ibb.co/cKrXTQ9d/placentals.png",
-    platypus: "https://i.ibb.co/0yhf85cs/platypus.png",
-    echidna: "https://i.ibb.co/LXfzr8R7/echidna.png",
-    "red kangaroo": "https://i.ibb.co/1tK1Z1Ht/kangaroo.png",
-    koala: "https://i.ibb.co/yBSW8fpR/koala.png",
-    carnivora: "https://i.ibb.co/1wYmsP5/carnivora.png",
-    primates: "https://i.ibb.co/w9gtfyD/primates.png",
-    wolf: "https://i.ibb.co/BHP4VbQY/wolf.png",
-    tiger: "https://i.ibb.co/nNchn0vs/tiger.png",
-    human: "https://i.ibb.co/2Hp9fzF/human.png",
-    chimpanzee: "https://i.ibb.co/3QnChC0/chimpanzee.png",
-  };
-  return images[name];
-}
-
-function getFacts(child: TreeNode): string {
-  const name = child.type === "branch" ? child.label : child.data.name;
-
-  const facts: Record<string, string> = {
-    marsupials:
-      "Marsupials give birth to underdeveloped young that continue growing in a pouch. They include kangaroos, koalas, wallabies, and wombats.",
-    monotremes:
-      "Monotremes are egg-laying mammals, a group that includes only the platypus and echidnas. They are found exclusively in Australia and New Guinea.",
-    placentals:
-      "Placentals are mammals whose young develop fully inside the mother’s womb before birth. This group includes humans, dogs, cats, and whales.",
-    platypus:
-      "The platypus is one of the only mammals that lays eggs and has a duck-like bill. Males have venomous spurs on their hind legs.",
-    human:
-      "Humans are the only primates capable of complex language, technology, and cultural evolution. They have colonized every continent on Earth.",
-    chimpanzee:
-      "Chimpanzees are one of our closest living relatives, sharing about 98.8% of our DNA. They use tools, show emotions, and live in complex social groups.",
-    tiger:
-      "Tigers are the largest wild cats and can weigh over 300 kg. Each tiger has a unique stripe pattern, like a fingerprint.",
-    wolf: "Wolves are highly social animals that live and hunt in packs. They communicate through howls, body language, and scent marking.",
-    echidna:
-      "Echidnas are spiny anteaters that use their long, sticky tongues to catch insects. Like platypuses, they lay eggs and are monotremes.",
-    "red kangaroo":
-      "Red kangaroos are the largest marsupial species and can leap over 8 meters in a single bound. Males are often reddish-brown while females are bluish-grey",
-    koala:
-      "Koalas sleep up to 20 hours a day and eat only eucalyptus leaves. They are marsupials, and their babies (joeys) develop in a pouch.",
-  };
-
-  return facts[name];
-}
-// Mobile sidebar state
-const sidebarOpen = ref(false);
 function toggleSidebar() {
   sidebarOpen.value = !sidebarOpen.value;
 }
+
 function closeSidebar() {
   sidebarOpen.value = false;
 }
@@ -88,160 +25,22 @@ function closeSidebar() {
 
 <template>
   <div class="bg-primary text-primary min-h-screen overflow-hidden">
-    <!-- Parent flex container for desktop, block for mobile -->
-    <div class="md:flex md:flex-row">
-      <!-- Sidebar (desktop: relative, mobile: fixed overlay) -->
-      <div>
-        <!-- Overlay for mobile -->
-        <div
-          v-if="sidebarOpen"
-          class="fixed inset-0 z-30 bg-black/[0.02] md:hidden"
-          @click="closeSidebar"
-        ></div>
-        <div
-          class="bg-primary flex flex-col shadow-xl transition-transform duration-300 md:relative md:w-80 md:h-screen md:z-20 fixed top-0 left-0 h-full w-72 max-w-full z-40 md:translate-x-0"
-          :class="[
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full',
-            'md:translate-x-0',
-          ]"
-        >
-          <div class="p-6 pt-20 md:p-8 md:pt-8">
-            <h1
-              class="text-xl md:text-2xl font-bold text-accent tracking-wide mb-4"
-            >
-              InDanger
-            </h1>
-            <TreeOfLife @select-node="handleSelectNode" />
-          </div>
-          <div class="p-6 md:p-8 mt-auto hidden md:block">
-            <div class="text-muted text-xs md:text-sm font-light">
-              <span>{{ paddedCurrentSlide }}</span> /
-              <span>{{ paddedTotalSlides }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Hamburger menu (mobile only) -->
-      <button
-        class="fixed top-4 left-4 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-primary[0.08] shadow-md text-accent md:hidden"
-        @click="toggleSidebar"
-        aria-label="Open menu"
-      >
-        <svg
-          class="w-7 h-7"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
-      <!-- Main content -->
-      <div class="flex-1 h-screen flex">
-        <div class="flex flex-col md:flex-row w-full h-full">
-          <template
-            v-if="
-              treeStore.selectedNode &&
-              treeStore.selectedNode.type === 'branch' &&
-              treeStore.selectedNode.children &&
-              treeStore.selectedNode.children.length
-            "
-          >
-            <div class="flex flex-col md:flex-row w-full h-full">
-              <div
-                v-motion
-                :initial="{ flex: 1 }"
-                :hovered="{ flex: 1.7 }"
-                :transition="{ type: 'tween', duration: 0.5 }"
-                v-for="(child, idx) in treeStore.selectedNode.children"
-                :key="
-                  child.type === 'branch'
-                    ? 'branch-' + child.label
-                    : 'leaf-' + child.data.name
-                "
-                class="relative flex items-center justify-center h-64 md:h-full min-w-0 overflow-hidden group cursor-pointer transition-all duration-500 shadow-lg border-b md:border-b-0 md:border-r border-secondary"
-                :class="
-                  idx === treeStore.selectedNode.children.length - 1 ? '' : ''
-                "
-              >
-                <!-- Background image -->
-                <div
-                  class="absolute inset-0 bg-center bg-cover transition-all duration-500 grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-75 group-hover:scale-105"
-                  :style="{
-                    backgroundImage: `url('${getAnimalImage(child)}')`,
-                  }"
-                ></div>
-                <!-- Overlay -->
-                <div class="absolute inset-0 bg-primary[0.05]"></div>
-                <!-- Animal name -->
-                <div
-                  class="relative z-10 flex items-center justify-center w-full h-full"
-                >
-                  <span
-                    class="text-2xl md:text-5xl font-bold text-secondary font-serif text-center w-full"
-                  >
-                    {{
-                      child.type === "branch" ? child.label : child.data.name
-                    }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <div
-              v-if="
-                treeStore.selectedNode && treeStore.selectedNode.type === 'leaf'
-              "
-              class="flex flex-col md:flex-row w-full h-full"
-            >
-              <div
-                class="bg-center bg-no-repeat bg-cover flex items-center justify-center w-full min-h-3/6 md:h-full md:basis-3/5 md:w-3/5"
-                :style="{
-                  backgroundImage: `url('${getAnimalImage(
-                    treeStore.selectedNode
-                  )}')`,
-                }"
-              ></div>
-              <div
-                class="flex flex-col items-center justify-center w-full min-h-[100px] md:min-h-0 md:h-full md:basis-2/5 md:w-2/5 md:min-w-[300px]"
-              >
-                <span
-                  class="text-4xl md:text-6xl font-extrabold text-secondary font-serif text-center mb-6 tracking-tight drop-shadow"
-                >
-                  {{ treeStore.selectedNode.data.name }}
-                </span>
-                <div class="w-2/3 h-0.5 bg-secondary rounded-full mb-6"></div>
-                <span
-                  class="text-base md:text-lg text-accent font-serif text-center italic opacity-80 px-6"
-                >
-                  {{ getFacts(treeStore.selectedNode) }}
-                </span>
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-    <!-- Top right buttons -->
-    <div class="fixed top-6 right-6 z-30 flex items-center space-x-4">
-      <button
-        class="w-10 h-10 flex items-center justify-center text-accent hover:text-muted transition-colors"
-        aria-label="Search"
-      >
-        <i class="ri-search-line ri-lg" />
-      </button>
-      <button
-        class="w-10 h-10 flex items-center justify-center text-accent hover:text-muted transition-colors"
-        aria-label="Menu"
-      >
-        <i class="ri-menu-line ri-lg" />
-      </button>
-    </div>
+    <div
+      v-if="sidebarOpen"
+      class="fixed inset-0 z-30 bg-black/[0.02] md:hidden"
+      @click="closeSidebar"
+      aria-label="Close sidebar overlay"
+      tabindex="0"
+      @keydown.enter="closeSidebar"
+    ></div>
+    <Sidebar :open="sidebarOpen">
+      <TreeOfLife @select-node="handleSelectNode" />
+    </Sidebar>
+    <HamburgerMenu v-if="!sidebarOpen" @open="toggleSidebar" />
+    <MainContent
+      :treeStore="treeStore"
+      :sidebarOpen="sidebarOpen"
+      @closeSidebar="closeSidebar"
+    />
   </div>
 </template>
